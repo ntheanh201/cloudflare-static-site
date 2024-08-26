@@ -1,7 +1,6 @@
 ## Problem
 
-- When using a bash script and environment variables inside `package.json` scripts (
-  e.g:
+- When deploying a static site with NPM scripts that utilize bash commands and environment variables file inside `package.json` scripts, you might define something like:
 
 ```
   "scripts": {
@@ -9,7 +8,7 @@
   }
 ```
 
-deploying with Cloudflare Pages will throw an error like this:
+However, when deploying with Cloudflare Pages, this approach can lead to errors such as:
 
 ![Cloudflare Error](./img/cf_pg_err.png)
 
