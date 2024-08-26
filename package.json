@@ -4,9 +4,33 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "copy-bootstrap": "cp js/bootstrap.min.js dist/js/",
+    "clean": "rimraf dist",
+    "transpile-js": "dotenvx run -- bash -c 'read -r -a JS_FILES <<< \"$JS_FILES\"; for file in \"${JS_FILES[@]}\"; do(babel js/$file.js -o dist/js/$file.js --presets=@babel/preset-env); done'",
+    "minify-js": "dotenvx run -- bash -c 'read -r -a JS_FILES <<< \"$JS_FILES\"; for file in \"${JS_FILES[@]}\"; do(uglifyjs dist/js/\"$file\".js --compress -o dist/js/\"$file\".js); done'",
+    "optimize-js": "npm run transpile-js && npm run minify-js",
+    "optimize-css": "dotenvx run -- bash -c 'IFS=\" \" read -r -a CSS_FILES <<< \"$CSS_FILES\"; for file in \"${CSS_FILES[@]}\"; do(postcss css/\"$file\".css --use autoprefixer cssnano postcss-pxtorem --output dist/css/\"$file\".css --no-map); done'",
+    "optimize-html": "html-minifier-terser index.html --collapse-whitespace --output=dist/index.html",
+    "build": "npm run clean && npm run optimize-js && npm run copy-bootstrap && npm run optimize-css && npm run optimize-html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "0BSD"
+  "author": "ntheanh201",
+  "license": "0BSD",
+  "devDependencies": {
+    "@babel/cli": "^7.24.8",
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.4",
+    "autoprefixer": "^10.4.20",
+    "cssnano": "^7.0.5",
+    "html-minifier-terser": "^7.2.0",
+    "postcss": "^8.4.41",
+    "postcss-cli": "^11.0.0",
+    "postcss-pxtorem": "^6.1.0",
+    "rimraf": "^6.0.1",
+    "uglify-js": "^3.19.2"
+  },
+  "dependencies": {
+    "@dotenvx/dotenvx": "^1.10.3"
+  }
 }
